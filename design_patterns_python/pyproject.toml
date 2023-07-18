@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "design-patterns-python"
+version = "0.1.0"
+description = ""
+authors = ["arturj <arturjardel9@gmail.com>"]
+readme = "README.md"
+packages = [{include = "design_patterns_python"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
