@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "mvc"
+version = "0.1.0"
+description = ""
+authors = ["arturj <arturjardel9@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+tornado = "^6.3.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
