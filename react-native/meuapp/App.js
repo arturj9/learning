@@ -9,30 +9,62 @@ import {
   ScrollView,
   FlatList,
   Switch,
+  TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 
 import Pessoas from './src/Pessoas';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Switch
+// AsyncStorage
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: false,
+      input: '',
+      nome: '',
     };
+    this.gravaNome = this.gravaNome.bind(this);
+  }
+
+  // ComponentDidMount - Quando o componente é montado em tela
+  async componentDidMount(){
+    await AsyncStorage.getItem('nome').then((value) => {
+      this.setState({ nome: value });
+    });
+  }
+
+  // ComponentDidUpdate - Quando o componente é atualizado
+  async componentDidUpdate(_, prevState) {
+    const nome = this.state.nome;
+    if (prevState !== nome) {
+      await AsyncStorage.setItem('nome', nome);
+    }
+  }
+
+  gravaNome() {
+    this.setState({ nome: this.state.input });
+    alert('Nome salvo com sucesso!');
+    Keyboard.dismiss();
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Switch
-          value={this.state.status}
-          onValueChange={valorSwitch => this.setState({ status: valorSwitch })}
-          thumbColor='#f700ffff'
-        />
-        <Text style={{textAlign:'center', fontSize:30}}>{(this.state.status) ? 'Ativo': 'Inativo'}</Text>
+        <View style={styles.viewInput}>
+          <TextInput
+            style={styles.input}
+            value={this.state.input}
+            onChangeText={text => this.setState({ input: text })}
+            underlineColorAndroid="transparent"
+          />
+          <TouchableOpacity onPress={this.gravaNome}>
+            <Text style={styles.botao}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.nome}>{this.state.nome}</Text>
       </View>
     );
   }
@@ -40,9 +72,62 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  viewInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  input: {
+    width: 350,
+    height: 40,
+    borderColor: '#000',
+    borderWidth: 1,
+  },
+  botao: {
+    backgroundColor: '#222',
+    color: '#fff',
+    padding: 10,
+    height: 40,
+    marginLeft: 3,
+  },
+  nome: {
+    fontSize: 30,
     marginTop: 15,
+    textAlign: 'center',
   },
 });
+
+// Switch
+// export default class App extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       status: false,
+//     };
+//   }
+
+//   render() {
+//     return (
+//       <View style={styles.container}>
+//         <Switch
+//           value={this.state.status}
+//           onValueChange={valorSwitch => this.setState({ status: valorSwitch })}
+//           thumbColor='#f700ffff'
+//         />
+//         <Text style={{textAlign:'center', fontSize:30}}>{(this.state.status) ? 'Ativo': 'Inativo'}</Text>
+//       </View>
+//     );
+//   }
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     marginTop: 15,
+//   },
+// });
 
 // Slider
 // export default class App extends Component {
